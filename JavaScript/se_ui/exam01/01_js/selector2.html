@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>exam</title>
+<link rel="stylesheet" href="common.css" />
+<script>
+// javascript code
+window.onload = function(){
+	var examObj1 = document.getElementsByClassName('exam_wrap')[0];
+	examObj1.getElementsByTagName('button')[0].onclick = function(){
+		var examChild = examObj1.getElementsByClassName('exam_q')[0].querySelectorAll('*');
+		examChild[0].style.border = "4px solid #ff0000";
+	};
+	var examObj2 = document.getElementsByClassName('exam_wrap')[1];
+	examObj2.getElementsByTagName('button')[0].onclick = function(){
+		var examChild = examObj2.getElementsByClassName('exam_q')[0].querySelectorAll('*');
+		examChild[examChild.length - 1].style.border = "4px solid #ff0000";
+	};
+	var examObj3 = document.getElementsByClassName('exam_wrap')[2];
+	examObj3.getElementsByTagName('button')[0].onclick = function(){
+		var examChild = examObj3.getElementsByClassName('exam_q')[0].querySelectorAll(':first-child');
+		for(var i = 0; i < examChild.length; i++){
+			examChild[i].style.border = "4px solid #ff0000";
+		}
+	};
+	var examObj4 = document.getElementsByClassName('exam_wrap')[3];
+	examObj4.getElementsByTagName('button')[0].onclick = function(){
+		var examChild = examObj4.getElementsByClassName('exam_q')[0].querySelectorAll(':last-child');
+		for(var i = 0; i < examChild.length; i++){
+			examChild[i].style.border = "4px solid #ff0000";
+		}
+	};
+	var examObj5 = document.getElementsByClassName('exam_wrap')[4];
+	examObj5.getElementsByTagName('button')[0].onclick = function(){
+		var examChild = examObj5.getElementsByClassName('exam_q')[0].querySelectorAll(':nth-child(2)');
+		for(var i = 0; i < examChild.length; i++){
+			examChild[i].style.border = "4px solid #ff0000";
+		}
+	};
+	var examObj6 = document.getElementsByClassName('exam_wrap')[5];
+	examObj6.getElementsByTagName('button')[0].onclick = function(){
+		var examChild = examObj6.getElementsByClassName('exam_q')[0].querySelectorAll(':nth-child(3)');
+		for(var i = 0; i < examChild.length; i++){
+			examChild[i].style.border = "4px solid #ff0000";
+		}
+	};
+	var examObj7 = document.getElementsByClassName('exam_wrap')[6];
+	examObj7.getElementsByTagName('button')[0].onclick = function(){
+		var examChild = examObj7.getElementsByClassName('exam_q')[0].querySelectorAll(':nth-child(n+4)');
+		for(var i = 0; i < examChild.length; i++){
+			examChild[i].style.border = "4px solid #ff0000";
+		}
+	};
+	var examObj8 = document.getElementsByClassName('exam_wrap')[7];
+	examObj8.getElementsByTagName('button')[0].onclick = function(){
+		var examChild = examObj8.getElementsByClassName('exam_q')[0].querySelectorAll(':nth-child(-n+2)');
+		for(var i = 0; i < examChild.length; i++){
+			examChild[i].style.border = "4px solid #ff0000";
+		}
+	};
+}
+</script>
+</head>
+<body>
+<!-- wrapper [s] -->
+<div id="wrapper">
+	<!-- header [s] -->
+	<div id="header">
+	</div>
+	<!-- header [e] -->
+	<hr />
+	<!-- container [s] -->
+	<div id="container">
+		<div class="exam_wrap">
+			<h1>Q. <strong class="point">태그 순서가 첫번째인 모든 Elements</strong>를 선택</h1>
+			<div class="exam_q"><!-- 부모 -->
+				<div>1<em>em</em></div>
+				<div>2<em>em</em></div>
+				<div>3<em>em</em></div>
+			</div>
+			<button type="button">view</button>
+			<p>Tip) :first / .first()</p>
+		</div>
+		<div class="exam_wrap">
+			<h1>Q. <strong class="point">태그 순서가 마지막인 모든 Elements</strong>를 선택</h1>
+			<div class="exam_q"><!-- 부모 -->
+				<div>1<em>em</em></div>
+				<div>2<em>em</em></div>
+				<div>3<em>em</em></div>
+			</div>
+			<button type="button">view</button>
+			<p>Tip) :last / .last()</p>
+		</div>
+		<div class="exam_wrap">
+			<h1>Q. <strong class="point">첫번째 자식 Element</strong>를 선택</h1>
+			<div class="exam_q"><!-- 부모 -->
+				<div>1<em>em</em></div>
+				<div>2<em>em</em></div>
+				<div>3<em>em</em></div>
+			</div>
+			<button type="button">view</button>
+			<p>Tip) :first-child</p>
+		</div>
+		<div class="exam_wrap">
+			<h1>Q. <strong class="point">마지막 자식 Element</strong>를 선택</h1>
+			<div class="exam_q"><!-- 부모 -->
+				<div>1<em>em</em></div>
+				<div>2<em>em</em></div>
+				<div>3<em>em</em></div>
+			</div>
+			<button type="button">view</button>
+			<p>Tip) :last-child</p>
+		</div>
+		<div class="exam_wrap">
+			<h1>Q. <strong class="point">태그 순서가 2번째인 자식 Element</strong>를 선택</h1>
+			<div class="exam_q"><!-- 부모 -->
+				<div>1</div>
+				<div>2<div>child1</div></div>
+				<div>3<div>child1</div><div>child2</div></div>
+			</div>
+			<button type="button">view</button>
+			<p>Tip) :nth-child(n)</p>
+		</div>
+		<div class="exam_wrap">
+			<h1>Q. <strong class="point">태그 순서가 3번째인 Element</strong>를 선택</h1>
+			<div class="exam_q"><!-- 부모 -->
+				<div>1</div>
+				<div>2</div>
+				<div>3</div>
+				<div>4</div>
+				<div>5</div>
+				<div>6</div>
+			</div>
+			<button type="button">view</button>
+			<p>Tip) :eq(n) / .eq(n)</p>
+		</div>
+		<div class="exam_wrap">
+			<h1>Q. <strong class="point">태그 순서가 3번째인 Element 이후의 Elements</strong>를 선택</h1>
+			<div class="exam_q"><!-- 부모 -->
+				<div>1</div>
+				<div>2</div>
+				<div>3</div>
+				<div>4</div>
+				<div>5</div>
+				<div>6</div>
+			</div>
+			<button type="button">view</button>
+			<p>Tip) :gt(n) / .nextAll()</p>
+		</div>
+		<div class="exam_wrap">
+			<h1>Q. <strong class="point">태그 순서가 3번째인 Element 이전의 Elements</strong>를 선택</h1>
+			<div class="exam_q"><!-- 부모 -->
+				<div>1</div>
+				<div>2</div>
+				<div>3</div>
+				<div>4</div>
+				<div>5</div>
+				<div>6</div>
+			</div>
+			<button type="button">view</button>
+			<p>Tip) :lt(n) / .prevAll()</p>
+		</div>
+	</div>
+	<!-- container [e] -->
+	<hr />
+	<!-- footer [s] -->
+	<div id="footer">
+	</div>
+	<!-- footer [e] -->
+</div>
+<!-- wrapper [e] -->
+</body>
+</html>
