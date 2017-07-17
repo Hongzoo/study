@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>exam</title>
+<link rel="stylesheet" href="common.css" />
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+$(function(){
+	var exam01 = $('.exam_wrap').eq(0);
+	var target01 = exam01.find('.exam_q li');
+	var nIndex01 = 0;
+	exam01.find('button').on('click', function(){
+		if(nIndex01 < target01.length) {
+			target01.eq(nIndex01).css('background','gold');
+			nIndex01++;
+		}
+	});
+
+	var exam02 = $('.exam_wrap').eq(1);
+	var target02 = exam02.find('.exam_q li');
+	var nIndex02 = target02.length - 1;
+	exam02.find('button').on('click', function(){
+		if(nIndex02 >= 0) {
+			target02.eq(nIndex02).css('background','gold');
+			nIndex02--;
+		}
+	});
+
+	var exam03 = $('.exam_wrap').eq(2);
+	var target03 = exam03.find('.exam_q li');
+	var nIndex03 = 0;
+	exam03.find('button:eq(0)').on('click', function(){
+		if(nIndex03 > 0){
+			target03.css('background','').eq(nIndex03-1).css('background','gold');
+			nIndex03--;
+		}
+	});
+	exam03.find('button:eq(1)').on('click', function(){
+		if(nIndex03 < target03.length-1) {
+			target03.css('background','').eq(nIndex03+1).css('background','gold');
+			nIndex03++;
+		}
+	});
+
+	var exam04 = $('.exam_wrap').eq(3);
+	var target04 = exam04.find('.exam_q li');
+	var nIndex04 = 0;
+	exam04.find('button:eq(0)').on('click', function(){
+		if(nIndex04 <= 0){
+			nIndex04 = target04.length;
+		}
+		if(nIndex04 > 0){
+			target04.removeClass('active').eq(nIndex04-1).addClass('active');
+			nIndex04--;
+		}
+	});
+	exam04.find('button:eq(1)').on('click', function(){
+		if(nIndex04 >= target04.length-1){
+			nIndex04 = -1;
+		}
+		if(nIndex04 < target04.length-1) {
+			target04.removeClass('active').eq(nIndex04+1).addClass('active');
+			nIndex04++;
+		}
+	});
+});
+</script>
+</head>
+<body>
+<!-- wrapper [s] -->
+<div id="wrapper">
+	<!-- header [s] -->
+	<div id="header">
+	</div>
+	<!-- header [e] -->
+	<hr />
+	<!-- container [s] -->
+	<div id="container">
+		<div class="exam_wrap">
+			<h1>Q. 첫번째부터 순서대로 선택하세요 (style 제어)</h1>
+			<div class="exam_q"><!-- 부모 -->
+				<ul>
+					<li>one</li>
+					<li>two</li>
+					<li>three</li>
+					<li>four</li>
+					<li>five</li>
+					<li>six</li>
+					<li>seven</li>
+					<li>eight</li>
+				</ul>
+			</div>
+			<button type="button">다음</button>
+		</div>
+		<div class="exam_wrap">
+			<h1>Q. 마지막부터 역순대로 선택하세요 (style 제어)</h1>
+			<div class="exam_q"><!-- 부모 -->
+				<ul>
+					<li>one</li>
+					<li>two</li>
+					<li>three</li>
+					<li>four</li>
+					<li>five</li>
+					<li>six</li>
+					<li>seven</li>
+				</ul>
+			</div>
+			<button type="button">이전</button>
+		</div>
+		<div class="exam_wrap">
+			<h1>Q. 첫번째부터 순서대로 선택하고, 전에 선택했던 Element의 배경색을 지우세요 (style 제어)</h1>
+			<div class="exam_q"><!-- 부모 -->
+				<ul>
+					<li style="background-color:gold">one</li>
+					<li>two</li>
+					<li>three</li>
+					<li>four</li>
+					<li>five</li>
+					<li>six</li>
+					<li>seven</li>
+					<li>eight</li>
+					<li>nine</li>
+				</ul>
+			</div>
+			<button type="button">이전</button>
+			<button type="button">다음</button>
+		</div>
+        <div class="exam_wrap">
+            <h1>Q. 첫번째부터 순서대로 선택하고, 전에 선택했던 Element의 배경색을 지우시고, 무한loop 돌게 하세요 (클래스 제어)</h1>
+            <div class="exam_q"><!-- 부모 -->
+                <ul>
+                    <li class="active">one</li>
+                    <li>two</li>
+                    <li>three</li>
+                    <li>four</li>
+                    <li>five</li>
+                    <li>six</li>
+                    <li>seven</li>
+                    <li>eight</li>
+                    <li>nine</li>
+                </ul>
+            </div>
+            <button type="button">이전</button>
+            <button type="button">다음</button>
+        </div>
+	</div>
+	<!-- container [e] -->
+	<hr />
+	<!-- footer [s] -->
+	<div id="footer">
+	</div>
+	<!-- footer [e] -->
+</div>
+<!-- wrapper [e] -->
+</body>
+</html>
