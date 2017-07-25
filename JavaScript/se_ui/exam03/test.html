@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>exam</title>
+<link rel="stylesheet" href="common.css" />
+<script src="https://code.jquery.com/jquery-latest.js"></script>
+<script type="text/javascript">
+	$(function(){
+		var obj = {
+		    init : function () {
+		    	// Q. 객체 내의 다른 메서드를 호출해보세요.
+		        this.setElements();
+		    },
+		    setElements : function () {
+		        console.log('call');
+		    }
+		};
+		console.log('Q. 객체 내의 다른 메서드를 호출해보세요.');
+		obj.init();
+
+		var obj2 = {
+			init : function() {
+				// Q. 객체 내에서 다른 객체의 메서드를 호출해보세요.
+				obj.setElements();
+			}
+		};
+		console.log('Q. 객체 내에서 다른 객체의 메서드를 호출해보세요.');
+		obj2.init();
+
+		// Q. 데이터 타입들을 모두 넣은후, 값들을 출력해보세요.
+		var obj3 = {
+			func : function() {
+				console.log('func');
+			},
+			num : 3,
+			bln : true,
+			str : 'str',
+			arr : [1, 2, 3],
+			nl : null,
+			udf : undefined
+		};
+		console.log('Q. 데이터 타입들을 모두 넣은후, 값들을 출력해보세요.');
+		console.log(obj3.func);
+		console.log(obj3.num);
+		console.log(obj3.bln);
+		console.log(obj3.str);
+		console.log(obj3.arr);
+		console.log(obj3.nl);
+		console.log(obj3.udf);
+
+		// Q. 객체내의 모든 속성들의 값을 배열에 저장한후, abc 순으로 sorting 하여, 'abcdefg' 문자열로 출력해보세요.
+		var obj4 = {
+			e : 'e',
+			d : 'd',
+			b : 'b',
+			g : 'g',
+			c : 'c',
+			f : 'f',
+			a : 'a'
+		};
+		var aSortAbc = [];
+		var nIndex = 0;
+
+		for(var key in obj4) {
+			aSortAbc[nIndex] = obj4[key];
+			nIndex ++;
+		}
+		console.log("Q. 객체내의 모든 속성들의 값을 배열에 저장한후, abc 순으로 sorting 하여, 'abcdefg' 문자열로 출력해보세요.")
+		console.log(aSortAbc.sort().join(''));
+
+		// Q. 'bcaebe' 문자열을 hasOwnProperty 를 사용해서, {a : 1, b : 2, c : 1, e : 2} 로 변경해보세요.
+		var sStr = 'bcaebe',
+			aStrSort = [],
+			oObj = {};
+
+		for(var i=0,max=sStr.length; i<max; i++){
+			aStrSort[i] = sStr[i];
+		}
+		aStrSort.sort();
+		for(var i=0,max=aStrSort.length; i<max; i++){
+			var sTemp = aStrSort[i];
+			if(oObj.hasOwnProperty(sTemp)){
+				oObj[sTemp] += 1;
+			} else {
+				oObj[sTemp] = 1;
+			}
+		}
+		console.log("Q. 'bcaebe' 문자열을 hasOwnProperty 를 사용해서, {a : 1, b : 2, c : 1, e : 2} 로 변경해보세요.");
+		console.log(oObj);
+	});
+</script>
+</head>
+<body>
+<!-- wrapper [s] -->
+<div id="wrapper">
+	<!-- header [s] -->
+	<div id="header">
+	</div>
+	<!-- header [e] -->
+	<hr />
+	<!-- container [s] -->
+	<div id="container">
+		<div class="exam_wrap">
+			<h1>Q. 함수 호출시 new 를 붙인 것과 안 붙인 것의 차이를 설명하세요.</h1>
+			<div class="exam_q">예시)<br>
+			var obj = function () {<br>
+			&nbsp;&nbsp;&nbsp;console.log(this);<br>
+			};<br>
+			obj();<br>
+			// new obj();
+			</div>
+			<div class="result">
+				return 문이 없는 함수는 기본값을 반환합니다.<br>
+				new 키워드로 호출되는 생성자의 경우, 기본값은 자신의 this 매개변수 값입니다.<br>
+				다른 모든 함수의 경우, 기본 반환값은 undefined입니다.<br>
+				new 키워드로 호출되는 생성자는 this가 함수 자신을 가리키고,<br>
+				new 키워드 없이 호출되면 this가 윈도우 객체를 가리킵니다.
+			</div>
+		</div>
+		<div class="exam_wrap">
+			<h1>Q. 객체 내에서의 this 를 설명하세요.</h1>
+			<div class="exam_q">예시)<br>
+			var obj = {<br>
+			&nbsp;&nbsp;&nbsp;init : function () {<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log(this);<br>
+			&nbsp;&nbsp;&nbsp;}<br>
+			};<br>
+			obj.init();<br>
+			</div>
+			<div class="result">
+				해당 객체 전부를 표현하는 것 같습니다.
+			</div>
+		</div>
+		<div class="exam_wrap">
+			<h1>Q. 객체 내의 다른 메서드를 호출해보세요.</h1>
+			<div class="exam_q">예시)<br>
+			var obj = {<br>
+			&nbsp;&nbsp;&nbsp;init : function () {<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// setElements 함수를 호출해봐요~<br>
+			&nbsp;&nbsp;&nbsp;},<br>
+			&nbsp;&nbsp;&nbsp;setElements : function () {<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('call');<br>
+			&nbsp;&nbsp;&nbsp;}<br>
+			};<br>
+			obj.init();<br>
+			</div>
+			<div class="result">
+				console 확인
+			</div>
+		</div>
+		<div class="exam_wrap">
+			<h1>Q. 객체 내에서 다른 객체의 메서드를 호출해보세요.</h1>
+			<div class="exam_q">예시)<br>
+			var obj = {<br>
+			&nbsp;&nbsp;&nbsp;init : function () {<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// 객체 obj2 의 init 을 호출해봐요~<br>
+			&nbsp;&nbsp;&nbsp;}<br>
+			};<br>
+			var obj2 = {<br>
+			&nbsp;&nbsp;&nbsp;init : function () {<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('call');<br>
+			&nbsp;&nbsp;&nbsp;}<br>
+			};<br>
+			obj.init();<br>
+			</div>
+			<div class="result">
+				console 확인
+			</div>
+		</div>
+		<div class="exam_wrap">
+			<h1>Q. 데이터 타입들을 모두 넣은후, 값들을 출력해보세요.</h1>
+			<div class="exam_q">예시)<br>
+			var obj = {<br>
+			&nbsp;&nbsp;&nbsp;func : function () {<br>
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;console.log('func');<br>
+			&nbsp;&nbsp;&nbsp;},<br>
+			&nbsp;&nbsp;&nbsp;num : 3,<br>
+			&nbsp;&nbsp;&nbsp;...<br>
+			};<br>
+			console.log(obj.func);<br>
+			console.log(obj.num);
+			</div>
+			<div class="result">
+				console 확인
+			</div>
+		</div>
+		<div class="exam_wrap">
+			<h1>Q. 객체내의 모든 속성들의 값을 배열에 저장한후, abc 순으로 sorting 하여, 'abcdefg' 문자열로 출력해보세요.</h1>
+			<div class="exam_q">예시)<br>
+			var obj = {<br>
+			&nbsp;&nbsp;&nbsp;e : 'e',<br>
+			&nbsp;&nbsp;&nbsp;d : 'd',<br>
+			&nbsp;&nbsp;&nbsp;b : 'b',<br>
+			&nbsp;&nbsp;&nbsp;g : 'g',<br>
+			&nbsp;&nbsp;&nbsp;c : 'c',<br>
+			&nbsp;&nbsp;&nbsp;f : 'f',<br>
+			&nbsp;&nbsp;&nbsp;a : 'a'<br>
+			};<br>
+			</div>
+			<div class="result">
+				console 확인
+			</div>
+		</div>
+		<div class="exam_wrap">
+			<h1>Q. 'bcaebe' 문자열을 hasOwnProperty 를 사용해서, {a : 1, b : 2, c : 1, e : 2} 로 변경해보세요.</h1>
+			<div class="result">
+				console 확인
+			</div>
+		</div>
+	</div>
+	<!-- container [e] -->
+	<hr />
+	<!-- footer [s] -->
+	<div id="footer">
+	</div>
+	<!-- footer [e] -->
+</div>
+<!-- wrapper [e] -->
+</body>
+</html>
