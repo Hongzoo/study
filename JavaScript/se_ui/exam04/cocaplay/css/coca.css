@@ -64,3 +64,7 @@ ul,ol{list-style:none}
 .snswrap img{width:320px}
 .snswrap .snsarea{overflow:hidden;width:280px;height:105px;margin:0 auto;padding:85px 20px 0;background:url(../img/bg_share.png) 50%  0 no-repeat;background-size:320px 190px;text-align:center}
 .snswrap .snsarea a{float:left;display:inline-block;overflow:hidden;width:25%;height:105px;text-indent:-999em}
+
+/* result */
+.result{padding:50px 0;text-align:center}
+.result p{display:inline-block;border-bottom:3px solid #0077c3;font-size:20px;font-family:'나눔바른고딕','나눔고딕',sans-serif;line-height:1.75}
