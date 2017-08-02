@@ -1,0 +1,66 @@
+@charset "euc-kr";
+
+body,p,h1,h2,h3,h4,h5,h6,ul,ol,li,dl,dt,dd,table,th,td,form,fieldset,legend,input,textarea,img,button,select{margin:0;padding:0}
+ul,ol{list-style:none}
+.blind{overflow:hidden;position:absolute;top:0;left:0;width:1px;height:1px;font-size:0;line-height:100px;white-space:nowrap}
+.evt_wrap select{-webkit-border-radius:0}
+.evt_wrap input{-webkit-border-radius:0;-webkit-appearance:none}
+.evt_wrap img{border:0;vertical-align:top}
+.evt_wrap .btn{display:block;overflow:hidden;width:320px;height:57px;margin:0 auto;background:url(../img/sp_btn.png) 0 0 no-repeat;background-size:320px 250px;line-height:200px;vertical-align:top}
+
+/* title */
+.evt_tit{position:relative;background:#fff url(../img/bg_evt.gif) 0 0 repeat-x;background-size:3px 242px}
+.evt_tit .tit_area{height:242px;background:url(../img/evt_tit.jpg) 50% 0 no-repeat;background-size:480px 242px}
+
+/* evt_ct */
+/* radio */
+.evt_ct .evt_area{position:relative;width:320px;min-height:260px;margin:0 auto;background:url(../img/evt_area.jpg) 50% 0 no-repeat;background-size:308px 148px}
+.evt_ct .evt_area .bxlst{overflow:hidden;margin:0 6px 24px}
+.evt_ct .evt_area .rabx{float:left;display:inline-block;position:relative;width:102px;margin:148px auto 0}
+.evt_ct .evt_area .rabx input[type='radio'] + label{background:url(../img/sp_ck.png) 50% 0 no-repeat;background-size:35px 70px}
+.evt_ct .evt_area .rabx label{display:inline-block;color:#888;font-size:12px;cursor:pointer}
+.evt_ct .evt_area .rabx input[type='radio']{position:absolute;top:0;left:0;width:35px;height:35px;margin:0;opacity:0;-webkit-box-sizing:border-box}
+.evt_ct .evt_area .rabx input[type='radio'] + label{display:inline-block;width:100%;height:35px;background-position:50% 0;box-sizing:border-box;-webkit-box-sizing:border-box}
+.evt_ct .evt_area .rabx.on input[type='radio'] + label,.evt_area .rabx input[type='radio']:checked + label{background-position:50% -35px;color:#3b3b3b}
+.evt_wrap .evt_ct .btn_app{background-position:0 0}
+.evt_wrap .evt_ct .btn_web{background-position:0 -57px}
+
+/* evt_ct2 */
+.evt_ct2{position:relative}
+.evt_ct2 .sp{overflow:hidden;background:url(../img/sp_game.png) 0 0 no-repeat;background-size:320px 436px}
+.evt_ct2 .game_area{width:290px;height:256px;margin:20px auto 0;padding:12px 0 0 30px;background-position:0 12px}
+.evt_ct2 .game_area li{float:left;position:relative;width:85px;height:256px}
+.evt_ct2 .game_area .winlane:after{overflow:hidden;position:absolute;top:136px;left:0;z-index:10;width:85px;height:120px;background:url(../img/sp_game.png) 0 0 no-repeat;background-size:320px 436px;content:''}
+.evt_ct2 .game_area .lane.winlane:after{background-position:-30px -256px}
+.evt_ct2 .game_area .lane2.winlane:after{background-position:-115px -256px}
+.evt_ct2 .game_area .lane3.winlane:after{background-position:-200px -256px}
+.evt_ct2 .game_area .gom{position:absolute;top:-12px;left:50%;z-index:20;width:52px;height:52px;margin-left:-26px;background-position:0 -380px}
+
+/* evt_ct3 */
+.evt_wrap .evt_ct3{position:relative}
+.evt_wrap .evt_ct3 .evt_area{width:320px;height:615px;margin:auto;background:url(../img/evt_area3.jpg) 50% 0 no-repeat;background-size:320px 615px}
+.evt_wrap .evt_ct3 .btn{position:absolute;left:50%;margin-left:-160px;background:none}
+.evt_wrap .evt_ct3 .btn_lst{top:307px}
+.evt_wrap .evt_ct3 .btn_invite{top:430px}
+.evt_wrap .evt_ct3 .btn_cfm{top:530px}
+
+/* evt_ct4 */
+.evt_wrap .evt_ct4{background:#fdfdfd url(../img/bg_evt3.gif) 0 10px repeat-x;background-size:2px 192px}
+.evt_wrap .evt_ct4 .evt_area{height:311px;background:url(../img/evt_area4.jpg) 50% 0 no-repeat;background-size:480px 311px}
+.evt_wrap .evt_ct4 .btn{height:49px}
+.evt_wrap .evt_ct4 .btn_buy{background-position:0 -165px}
+.evt_wrap .evt_ct4 .btn_out{background-position:0 -115px}
+
+/* notice */
+.notice_area{text-align:center;background:#474747}
+.notice_area img{width:320px}
+.btn_notice{display:block;height:24px;padding-top:10px}
+.btn_notice .sp{display:block;overflow:hidden;width:115px;height:15px;margin:0 auto;background:url(../img/sp_noti.png) no-repeat;background-size:115px 40px;text-indent:-999em}
+.btn_notice .sp{background-position:0 0}
+.btn_notice.cls .sp{background-position:0 -25px}
+
+/* sns */
+.snswrap{background:#fff;text-align:center}
+.snswrap img{width:320px}
+.snswrap .snsarea{overflow:hidden;width:280px;height:105px;margin:0 auto;padding:85px 20px 0;background:url(../img/bg_share.png) 50%  0 no-repeat;background-size:320px 190px;text-align:center}
+.snswrap .snsarea a{float:left;display:inline-block;overflow:hidden;width:25%;height:105px;text-indent:-999em}
