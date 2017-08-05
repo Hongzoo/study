@@ -9,28 +9,35 @@
 var exam = exam || {};
 exam.View = exam.View || {};
 
-exam.View.carousel = function() {
+exam.View.tab = function() {
 	this.init();
 };
 
-exam.View.carousel.prototype = {
+exam.View.tab.prototype = {
 	init: function() {
 		this._assignElements();
 		this._initVar();
+		this._initFunc();
 		this._attachEventHandlers();
 	},
 	_assignElements: function() {
-		this.welTabWrap = $('.slide_box');
-		this.welTabArea = this.welTabWrap.find('.slide_tab');
+		this.welTabWrap = $('.cast_box');
+		this.welTabArea = this.welTabWrap.find('.cast_tab');
 		this.welTabItem = this.welTabArea.find('li');
 		this.welTabBtn = this.welTabItem.find('a');
-		this.welTabCont = this.welTabWrap.find('.slide_cont');
-		this.welTabPrevBtn = this.welTabWrap.find('.slide_btn button').eq(0);
-		this.welTabNextBtn = this.welTabWrap.find('.slide_btn button').eq(1);
+		this.welTabCont = this.welTabWrap.find('.cast_cont');
+		this.welTabPrevBtn = this.welTabWrap.find('.cast_btn button').eq(0);
+		this.welTabNextBtn = this.welTabWrap.find('.cast_btn button').eq(1);
+		this.welTabPageArea = this.welTabWrap.find('.cast_num');
+		this.welTabCurrentPage = this.welTabPageArea.find('.current');
+		this.welTabTotalPage = this.welTabPageArea.find('.total');
 	},
 	_initVar : function() {
 		this.callBtn = null;
 		this.nIndex = this.welTabArea.find('li.active').index();
+	},
+	_initFunc : function() {
+		this.welTabTotalPage.text(this.welTabItem.length);
 	},
 	_attachEventHandlers: function() {
 		var oself = this;
@@ -64,9 +71,13 @@ exam.View.carousel.prototype = {
 		this.nIndex = callBtn.parent().index();
 		callBtn.parent().addClass('active').siblings().removeClass('active');
 		this.welTabCont.find(targetCont).addClass('active').siblings().removeClass('active');
+		this._refreshPageNum();
+	},
+	_refreshPageNum: function() {
+		this.welTabCurrentPage.text(this.nIndex+1);
 	}
 };
 
 $(function() {
-	var oMySlide = new exam.View.carousel();
+	var oMyTab = new exam.View.tab();
 })
