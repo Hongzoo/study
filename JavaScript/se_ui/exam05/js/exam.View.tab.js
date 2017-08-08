@@ -14,11 +14,11 @@ exam.View.tab = function() {
 };
 
 exam.View.tab.prototype = {
+	_welClickBtn: null,
 	init: function() {
 		this._assignElements();
-		this._initVar();
-		this._initFunc();
 		this._attachEventHandlers();
+		this._initLayout();
 	},
 	_assignElements: function() {
 		this.welTabWrap = $('.cast_box');
@@ -32,25 +32,22 @@ exam.View.tab.prototype = {
 		this.welTabCurrentPage = this.welTabPageArea.find('.current');
 		this.welTabTotalPage = this.welTabPageArea.find('.total');
 	},
-	_initVar : function() {
-		this.callBtn = null;
-		this.nIndex = this.welTabArea.find('li.active').index();
-	},
-	_initFunc : function() {
-		this.welTabTotalPage.text(this.welTabItem.length);
-	},
 	_attachEventHandlers: function() {
 		var oself = this;
 		this.welTabBtn.on('click', function(e) {
-			oself.callBtn = $(this);
+			oself._welClickBtn = $(this);
 			oself._onClickTabBtn(e);
 		});
 		this.welTabPrevBtn.on('click', $.proxy(this._onClickPrevBtn, this));
 		this.welTabNextBtn.on('click', $.proxy(this._onClickNextBtn, this));
 	},
+	_initLayout : function() {
+		this.nIndex = this.welTabArea.find('li.active').index();
+		this.welTabTotalPage.text(this.welTabItem.length);
+	},
 	_onClickTabBtn: function(e) {
 		e.preventDefault();
-		this._activeTab(this.callBtn);
+		this._activeTab(this._welClickBtn);
 	},
 	_onClickPrevBtn: function() {
 		if(this.nIndex == 0) {
@@ -66,10 +63,10 @@ exam.View.tab.prototype = {
 		}
 		this._activeTab(this.welTabItem.eq(this.nIndex+1).find('a'));
 	},
-	_activeTab: function(callBtn) {
-		var targetCont = callBtn.attr('href');
-		this.nIndex = callBtn.parent().index();
-		callBtn.parent().addClass('active').siblings().removeClass('active');
+	_activeTab: function(tabBtn) {
+		var targetCont = tabBtn.attr('href');
+		this.nIndex = tabBtn.parent().index();
+		tabBtn.parent().addClass('active').siblings().removeClass('active');
 		this.welTabCont.find(targetCont).addClass('active').siblings().removeClass('active');
 		this._refreshPageNum();
 	},
