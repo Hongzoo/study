@@ -175,6 +175,22 @@ button::-moz-focus-inner{padding:0;border:0}
             this.$btnNext = $('.cast_setting').find('.cast_btn > button').eq(1);
         },
         _bindEvent:function(){
+            // var oself = this;
+            // this.$tabBtn.on('click', function(e){ // 클릭 대상이 li가 아닌, 버튼이 되도록 수정
+            //     e.preventDefault();
+            //     oself.curIndex = $(this).parent().index();
+
+            //     //lnb
+            //     // $(this).addClass('active');
+            //     // $(this).siblings().removeClass('active');
+            //     // ↓ $(this)가 버튼이 되었으므로 li가 되게 수정
+            //     // $(this).parent().addClass('active');
+            //     // $(this).parent().siblings().removeClass('active');
+            //     // ↓ 2줄을 1줄로 수정
+            //     $(this).parent().addClass('active').siblings().removeClass('active');
+                
+            //     oself.showCont();
+            // });
             this.$tabBtn.on('click', $.proxy(this.showTab. this));
             this.$btnPrev.on('click', $.proxy(this.showPrev, this))
             this.$btnNext.on('click', $.proxy(this.showNext, this))
@@ -202,14 +218,18 @@ button::-moz-focus-inner{padding:0;border:0}
              if(this.curIndex<0){
                 this.curIndex = this.$tabLilength-1;
              }
-            this.$tabLi.eq(this.curIndex).find('a').trigger('click');
+            // $('.cast_tab li').eq(this.curIndex).trigger('click');
+            // this.$tabLi.eq(this.curIndex).trigger('click'); // 객체에 만들어놓은 엘리먼트 변수를 사용하도록 개선
+            this.$tabLi.eq(this.curIndex).find('a').trigger('click'); // 클릭대상이 버튼이 되도록 수정
         },
         showNext : function(){
             this.curIndex++;
             if (this.curIndex > this.$tabLilength-1){
                this.curIndex = 0;
             }
-            this.$tabLi.eq(this.curIndex).find('a').trigger('click');
+            // $('.cast_tab li').eq(this.curIndex).trigger('click');
+            // this.$tabLi.eq(this.curIndex).trigger('click'); // 객체에 만들어놓은 엘리먼트 변수를 사용하도록 개선
+            this.$tabLi.eq(this.curIndex).find('a').trigger('click'); // 클릭대상이 버튼이 되도록 수정
         },
     };
 
