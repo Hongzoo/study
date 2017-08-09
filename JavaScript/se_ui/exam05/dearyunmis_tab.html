@@ -175,9 +175,9 @@ button::-moz-focus-inner{padding:0;border:0}
             this.$btnNext = $('.cast_setting').find('.cast_btn > button').eq(1);
         },
         _bindEvent:function(){
-            this.$tabBtn.on('click', $.proxy(this.showTab. this));
-            this.$btnPrev.on('click', $.proxy(this.showPrev, this))
-            this.$btnNext.on('click', $.proxy(this.showNext, this))
+            this.$tabBtn.on('click', $.proxy(this.showTab, this));
+            this.$btnPrev.on('click', $.proxy(this.showPrev, this));
+            this.$btnNext.on('click', $.proxy(this.showNext, this));
         },
 
         _initFunc : function() {
@@ -188,14 +188,13 @@ button::-moz-focus-inner{padding:0;border:0}
             e.preventDefault();
             this.curIndex = $(e.currentTarget).parent().index();
             $(e.currentTarget).parent().addClass('active').siblings().removeClass('active');
+            this.showCont();
         },
         showCont : function() {
-
             //탭 내용
-            this.$tabCont.hide();
-            this.$tabCont.eq(this.curIndex).fadeIn();
+            this.$tabCont.hide().eq(this.curIndex).fadeIn();
             //네비게이션 값 설정
-            this.curNav.text(this.curIndex+1) ;
+            this.curNav.text(this.curIndex+1);
         },
         showPrev : function(){
              this.curIndex--;
@@ -210,7 +209,7 @@ button::-moz-focus-inner{padding:0;border:0}
                this.curIndex = 0;
             }
             this.$tabLi.eq(this.curIndex).find('a').trigger('click');
-        },
+        }
     };
 
     exam.View.slideBox = function (container, opts) {
@@ -308,14 +307,14 @@ button::-moz-focus-inner{padding:0;border:0}
             }
             this.$btnNavLi.eq(this.curIndex).addClass('active').siblings().removeClass('active');
         }
-    }
+    };
 
     $(function() {
-        var slideBox = new exam.View.slideBox('.cast_cont', {
+        var castBox = new exam.View.carousel('.cast_cont', {
             slider : '.cast_article'
         });
-
-        var castBox = new exam.View.carousel('.slide_cont', {
+        
+        var slideBox = new exam.View.slideBox('.slide_cont', {
             slider : '.slide_article'
         });
     });
