@@ -37,7 +37,7 @@ button::-moz-focus-inner{padding:0;border:0}
 .slide_tab ul li a{display:inline-block;width:12px;height:12px;border-radius:100%;background:#ccc;vertical-align:top}
 .slide_tab ul li.active a{background:#000}
 .slide_cont{overflow:hidden;position:relative;height:440px}
-.slide_article{display:block;position:absolute;left:0;top:0;width:100%;height:440px}
+.slide_article{display:none;position:absolute;left:0;top:0;width:100%;height:440px}
 .slide_article:nth-child(1){background:red}
 .slide_article:nth-child(2){background:orange}
 .slide_article:nth-child(3){background:yellow}
@@ -46,6 +46,7 @@ button::-moz-focus-inner{padding:0;border:0}
 .slide_article:nth-child(6){background:skyblue;color:#fff}
 .slide_article:nth-child(7){background:navy;color:#fff}
 .slide_article:nth-child(8){background:black;color:#fff}
+.slide_article.active{display:block}
 .slide_setting{font-size:0;line-height:0}
 .slide_setting .slide_btn button{position:absolute;top:50%;z-index:30;margin:0 20px}
 .slide_setting .slide_btn button:nth-child(1){left:0}
@@ -62,7 +63,7 @@ button::-moz-focus-inner{padding:0;border:0}
     <hr />
     <!-- container [s] -->
     <div id="container">
-        <div class="cast_box">
+        <div class="cast_box cast_box1"> <!-- 한 페이지에서 .cast_box가 여러개 필요할 땐, .cast_box1, .cast_box2로 추가클래스를 붙여주어야 함 -->
             <div class="cast_tab">
                 <ul>
                     <li class="active"><a href="#thema1">테마1</a></li>
@@ -90,6 +91,29 @@ button::-moz-focus-inner{padding:0;border:0}
                     <button type="button">이전</button><button type="button">다음</button>
                 </div>
                 <div class="cast_num"><span class="current">1</span> / <span class="total">8</span></div>
+            </div>
+        </div>
+
+        <div class="cast_box cast_box2"> <!-- 한 페이지에서 .cast_box가 여러개 필요할 땐, .cast_box1, .cast_box2로 추가클래스를 붙여주어야 함 -->
+            <div class="cast_tab">
+                <ul>
+                    <li class="active"><a href="#thema1">테마1</a></li>
+                    <li><a href="#thema2">테마2</a></li>
+                    <li><a href="#thema3">테마3</a></li>
+                    <li><a href="#thema4">테마4</a></li>
+                </ul>
+            </div>
+            <div class="cast_cont">
+                <div id="thema1" class="cast_article active">컨텐츠1</div>
+                <div id="thema2" class="cast_article">컨텐츠2</div>
+                <div id="thema3" class="cast_article">컨텐츠3</div>
+                <div id="thema4" class="cast_article">컨텐츠4</div>
+            </div>
+            <div class="cast_setting">
+                <div class="cast_btn">
+                    <button type="button">이전</button><button type="button">다음</button>
+                </div>
+                <div class="cast_num"><span class="current">1</span> / <span class="total">4</span></div>
             </div>
         </div>
 
@@ -145,178 +169,160 @@ button::-moz-focus-inner{padding:0;border:0}
 
     exam.View.carousel = function (container, opts) {
         var defParams = {
-                            wrap : $(container),
-                            slider: '.swiper-slide'
-                        };
-        this.opts = $.extend({}, defParams, opts);
+            wrap : $(container),
+            tabBtnArea : '.cast_tab',
+            contArea : '.cast_cont',
+            controlBtnArea : '.cast_btn',
+            animate : 'default', // animate 종류는 'default', 'fadeIn', 'slide' 3가지. 기본값을 'default' 설정.
+            pageNum : false, // page number도 연동시킬 것인지를 선택. 기본값을 false(연동하지 않음)로 설정. opts에서 true로 받을 경우만 연동됨.
+            pageNumArea : '.cast_num',
+        };
+        this.opts = $.extend({}, defParams, opts); // opts 값 받아온 것 중 겹치는 키값 있으면 덮어쓰고, 겹치는 키값 없으면 기본 defParams 값으로 사용
         this.init();
-
     };
 
     exam.View.carousel.prototype = {
+        orgIndex : 0,
+        curIndex : 0,
+        directType : '',
         init : function () {
-            this.curIndex = 0;
-            this.$index = 0;
-            this.$tabCont = $('.cast_cont>div');
-            this.curNav = $('.cast_num').find('.current');
             this._setElement();
             this._bindEvent();
             this._initFunc();
         },
         _setElement : function () {
-            this.wrap = this.opts.wrap;
-            this.slider = this.wrap.find(this.opts.slider);
+            // 변경될 수 있는 클래스명은 모두 this.opts 에서 받아오도록 작성
+            this.$wrap = this.opts.wrap;
+            this.$tabArea = this.$wrap.find(this.opts.tabBtnArea);
+            this.$tabLi = this.$tabArea.find('li');
+            this.$tabBtn = this.$tabLi.find('a');
+            this.$tabCont = this.$wrap.find(this.opts.contArea).children();
+            this.$controlBtnArea = this.$wrap.find(this.opts.controlBtnArea);
+            this.$btnPrev = this.$controlBtnArea.find('button').eq(0);
+            this.$btnNext = this.$controlBtnArea.find('button').eq(1);
 
-            this.$tabLi = $('.cast_tab > ul > li');
-            this.$tabLilength = $('.cast_tab > ul > li').length;
-            this.$tabBtn = $('.cast_tab > ul > li > a');
-            this.$tabNum = $('.cast_num .total');
-            this.$btnPrev = $('.cast_setting').find('.cast_btn > button').eq(0);
-            this.$btnNext = $('.cast_setting').find('.cast_btn > button').eq(1);
+            if(this.opts.pageNum === true) { // 플러그인(?) 호출시 'pageNum: true' 로 옵션값을 넣어준 경우만 실행. pageNum 관련 추가 세팅
+                this.$pageNumArea = this.$wrap.find(this.opts.pageNumArea);
+                this.$tabNum = this.$pageNumArea.find('.total');
+                this.$curNav = this.$pageNumArea.find('.current');
+            }
         },
         _bindEvent:function(){
-            this.$tabBtn.on('click', $.proxy(this.showTab, this));
-            this.$btnPrev.on('click', $.proxy(this.showPrev, this));
-            this.$btnNext.on('click', $.proxy(this.showNext, this));
+            this.$tabBtn.on('click', $.proxy(this._onClickTab, this)); // 탭버튼(or페이징버튼) Click
+            this.$btnPrev.on('click', $.proxy(this._onClickPrev, this)); // 이전버튼 Click
+            this.$btnNext.on('click', $.proxy(this._onClickNext, this)); // 다음버튼 Click
         },
-
-        _initFunc : function() {
-            this.$tabNum.text(this.$tabLilength);
+        _initFunc : function() { // 도큐먼트 다 읽은 후 처음 1번 세팅 할 내용들
+            this.nTabLiLength = this.$tabLi.length;
+            if(this.opts.pageNum === true) { // 플러그인(?) 호출시 'pageNum: true' 로 옵션값을 넣어준 경우만 실행. pageNum 관련 추가 세팅
+                this.$tabNum.text(this.nTabLiLength);
+            }
         },
-
-        showTab : function(e) {
+        _onClickTab : function(e) {
             e.preventDefault();
             this.curIndex = $(e.currentTarget).parent().index();
-            $(e.currentTarget).parent().addClass('active').siblings().removeClass('active');
-            this.showCont();
+            if(this.orgIndex < this.curIndex){ // 이전 컨텐츠 번호와 현재 선택된 번호의 크고 작음을 비교하여 선형적인(linear) 방향으로 움직이도록 함
+                this.directType = 'next';
+            }else{
+                this.directType = 'prev';
+            }
+            // this.viewExecute() 함수를 실행하기 전, 필요한 변수(this.curIndex, this.directType)를 세팅 완료했습니다.
+            this.viewExecute();
         },
-        showCont : function() {
-            //탭 내용
-            this.$tabCont.hide().eq(this.curIndex).fadeIn();
-            //네비게이션 값 설정
-            this.curNav.text(this.curIndex+1);
+        _onClickPrev : function(){
+            this.curIndex--;
+            if(this.curIndex<0){ // 이전으로 이동할 컨텐츠가 없다면 맨마지막 컨텐츠로 이동
+                this.curIndex = this.nTabLiLength-1;
+            }
+            this.directType = 'prev';
+            // this.viewExecute() 함수를 실행하기 전, 필요한 변수(this.curIndex, this.directType)를 세팅 완료했습니다.
+            this.viewExecute();
         },
-        showPrev : function(){
-             this.curIndex--;
-             if(this.curIndex<0){
-                this.curIndex = this.$tabLilength-1;
-             }
-            this.$tabLi.eq(this.curIndex).find('a').trigger('click');
-        },
-        showNext : function(){
+        _onClickNext : function(){
             this.curIndex++;
-            if (this.curIndex > this.$tabLilength-1){
-               this.curIndex = 0;
-            }
-            this.$tabLi.eq(this.curIndex).find('a').trigger('click');
-        }
-    };
-
-    exam.View.slideBox = function (container, opts) {
-        var defParams = {
-                            wrap : $(container),
-                            slider: '.swiper-slide'
-                        };
-        this.opts = $.extend({}, defParams, opts);
-        this.init();
-
-    };
-
-    exam.View.slideBox.prototype = {
-        orgIndex : 0,
-        curIndex : 0,
-        init:function(){
-            this._setElement();
-            this._bindEvent();
-            this.$slideCont.hide().eq(this.curIndex).show();
-        },
-        _setElement:function(){
-            this.wrap = this.opts.wrap;
-            this.slider = this.wrap.find(this.opts.slider);
-
-            this.$btnPrev = $('.slide_setting').find('.slide_btn > button').eq(0);
-            this.$btnNext = $('.slide_setting').find('.slide_btn > button').eq(1);
-            this.$btnNavLi = $('.slide_tab').find('ul > li');
-            this.$btnNav = $('.slide_tab').find('ul > li > a');
-            this.$slideCont = $('.slide_cont').find('.slide_article');
-        },
-        _bindEvent:function(){
-            this.$btnNav.on('click', $.proxy(this.showNav, this));
-            this.$btnPrev.on('click', $.proxy(this.showPrev, this));
-            this.$btnNext.on('click', $.proxy(this.showNext, this));
-        },
-         showPrev : function(){
-            this.orgIndex = this.curIndex;
-            this.curIndex --;
-            if(this.curIndex < 0){
-                this.curIndex = 7;
-            };
-            //컨텐츠 호출
-            this.showThis('prev');
-        },
-        showNext : function(){
-            this.orgIndex = this.curIndex;
-            this.curIndex ++;
-            if(this.curIndex > 7){
+            if (this.curIndex > this.nTabLiLength-1){ // 다음으로 이동할 컨텐츠가 없다면 맨처음 컨텐츠로 이동
                 this.curIndex = 0;
-            };
-            this.showThis();
+            }
+            this.directType = 'next';
+            // this.viewExecute() 함수를 실행하기 전, 필요한 변수(this.curIndex, this.directType)를 세팅 완료했습니다.
+            this.viewExecute();
         },
-        showNav:function(e){
-            e.preventDefault();
+        viewExecute : function() { // 화면 표현을 담당할 함수입니다. 하는일 : ①선택된 탭버튼(or페이징버튼) 활성화 / ②매칭될 컨텐츠 노출 / ③페이지 number 표시
+            // ①선택된 탭버튼(or페이징버튼) 활성화
+            this.$tabLi.removeClass('active').eq(this.curIndex).addClass('active');
+
+            // ②선택된 탭버튼(or페이징버튼)과 매칭될 컨텐츠 노출
+            // 설정된 애니메이션 값에 따라 인터랙션 분리
+            if(this.opts.animate === 'default') {
+                this.animateDefault();
+            } else if(this.opts.animate === 'fadeIn') {
+                this. animateFadeIn();
+            } else if(this.opts.animate === 'slide') {
+                this.animateSlide(this.directType);
+            }
+
+            // ③컨텐츠에 맞는 페이지 number 표시 (ex. 4/8)
+            if(this.opts.pageNum === true) {
+                this.$curNav.text(this.curIndex+1);   
+            }
+        },
+        animateDefault : function() {
+            if(this.curIndex == this.orgIndex) return; //활성화된 컨텐츠와 동일한 탭버튼(or페이징버튼)을 클릭할경우 추가 동작하지 않도록 함.
+
+            this.$tabCont.removeClass('active').eq(this.curIndex).addClass('active');
             this.orgIndex = this.curIndex;
-            this.curIndex = $(e.currentTarget).parent().index();
-
-            var type = '';
-            if(this.orgIndex < this.curIndex){
-                type = 'next';
-            }else{
-                type = 'prev';
-            }
-
-            this.showThis(type);
         },
-        showThis : function (type){
-            if(this.curIndex  == this.orgIndex){
-                return;
+        animateFadeIn : function() {
+            if(this.curIndex == this.orgIndex) return; //활성화된 컨텐츠와 동일한 탭버튼(or페이징버튼)을 클릭할경우 추가 동작하지 않도록 함.
+
+            this.$tabCont.hide().eq(this.curIndex).fadeIn();
+            this.orgIndex = this.curIndex;
+        },
+        animateSlide : function(type){
+            if(this.curIndex == this.orgIndex) return; //활성화된 컨텐츠와 동일한 탭버튼(or페이징버튼)을 클릭할경우 추가 동작하지 않도록 함.
+
+            //애니메이션 방향처리
+            var dirNum = 0;
+            if(type === 'prev'){
+                dirNum = -1; //왼쪽으로
+            }else if(type === 'next'){
+                dirNum = 1; //오른쪽으로
             }
 
-            //네비게이션
-            if(type === 'prev'){
-                //이전 슬라이드 내용
-                this.$slideCont.eq(this.curIndex).css('left', '-100%').show();
-                this.$slideCont.eq(this.orgIndex).stop().animate({
-                    left: '100%'
-                },function(){
-                    $(this).hide().css('left','');
-                });
-                this.$slideCont.eq(this.curIndex).stop().animate({
-                    left:  0
-                });
-            }else{
-                //다음 슬라이드
-                this.$slideCont.eq(this.curIndex).css('left', '100%').show();
-                this.$slideCont.eq(this.orgIndex).stop().animate({
-                    left: '-100%'
-                },function(){
-                    $(this).hide().css('left','');
-                });
-                this.$slideCont.eq(this.curIndex).stop().animate({
-                    left:  0
-                });
-            }
-            this.$btnNavLi.eq(this.curIndex).addClass('active').siblings().removeClass('active');
+            this.$tabCont.eq(this.curIndex).css('left', (100*dirNum)+'%').show();
+            this.$tabCont.eq(this.orgIndex).stop().animate({
+                left: (100*(-dirNum))+'%'
+            },function(){
+                $(this).hide().css('left','');
+            });
+            this.$tabCont.eq(this.curIndex).stop().animate({
+                left: 0
+            });
+            this.orgIndex = this.curIndex;
         }
     };
 
     $(function() {
-        var castBox = new exam.View.carousel('.cast_cont', {
-            slider : '.cast_article'
+        // 한 페이지에서 .cast_box가 여러개 필요할 땐 아래처럼
+        // .cast_box1, .cast_box2 추가 클래스가 container 옵션 자리에 들어가도록 작성하면 
+        // .cast_box가 여러개여도 서로 영향받지 않고 독립적으로 동작합니다.
+        var castBox1 = new exam.View.carousel('.cast_box1', {
+            pageNum : true // 페이지 number 연동이 필요할 경우에만 'true'로 별도 설정합니다.
+            // animate : 키값을 별도로 설정하지 않으면 default 로 실행됩니다.
         });
-        
-        var slideBox = new exam.View.slideBox('.slide_cont', {
-            slider : '.slide_article'
+        var castBox2 = new exam.View.carousel('.cast_box2', {
+            pageNum : true,
+            animate : 'fadeIn' // animate 종류를 'fadeIn'으로 설정
         });
+
+        // carousel 옵션 중 엘리먼트 기본값을 .cast_XXX 로 두었기 때문에
+        // .cast_XXX 클래스명이 아닌 구조에 적용하려면 다른 클래스명으로 재정의 해야합니다.
+        var slideBox = new exam.View.carousel('.slide_box', {
+            tabBtnArea : '.slide_tab',
+            contArea : '.slide_cont',
+            controlBtnArea : '.slide_btn',
+            animate : 'slide' // animate 종류를 'slide'로 설정
+        })
     });
 
 })(window, window.jQuery);
