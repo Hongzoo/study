@@ -182,9 +182,10 @@ button::-moz-focus-inner{padding:0;border:0}
     };
 
     exam.View.carousel.prototype = {
-        orgIndex : 0,
-        curIndex : 0,
-        directType : '',
+        nOrgIndex : 0,
+        nCurIndex : 0,
+        nTabLiLength : 0,
+        sDirectType : '',
         init : function () {
             this._setElement();
             this._bindEvent();
@@ -220,36 +221,36 @@ button::-moz-focus-inner{padding:0;border:0}
         },
         _onClickTab : function(e) {
             e.preventDefault();
-            this.curIndex = $(e.currentTarget).parent().index();
-            if(this.orgIndex < this.curIndex){ // 이전 컨텐츠 번호와 현재 선택된 번호의 크고 작음을 비교하여 선형적인(linear) 방향으로 움직이도록 함
-                this.directType = 'next';
+            this.nCurIndex = $(e.currentTarget).parent().index();
+            if(this.nOrgIndex < this.nCurIndex){ // 이전 컨텐츠 번호와 현재 선택된 번호의 크고 작음을 비교하여 선형적인(linear) 방향으로 움직이도록 함
+                this.sDirectType = 'next';
             }else{
-                this.directType = 'prev';
+                this.sDirectType = 'prev';
             }
-            // this.viewExecute() 함수를 실행하기 전, 필요한 변수(this.curIndex, this.directType)를 세팅 완료했습니다.
+            // this.viewExecute() 함수를 실행하기 전, 필요한 변수(this.nCurIndex, this.sDirectType)를 세팅 완료했습니다.
             this.viewExecute();
         },
         _onClickPrev : function(){
-            this.curIndex--;
-            if(this.curIndex<0){ // 이전으로 이동할 컨텐츠가 없다면 맨마지막 컨텐츠로 이동
-                this.curIndex = this.nTabLiLength-1;
+            this.nCurIndex--;
+            if(this.nCurIndex<0){ // 이전으로 이동할 컨텐츠가 없다면 맨마지막 컨텐츠로 이동
+                this.nCurIndex = this.nTabLiLength-1;
             }
-            this.directType = 'prev';
-            // this.viewExecute() 함수를 실행하기 전, 필요한 변수(this.curIndex, this.directType)를 세팅 완료했습니다.
+            this.sDirectType = 'prev';
+            // this.viewExecute() 함수를 실행하기 전, 필요한 변수(this.nCurIndex, this.sDirectType)를 세팅 완료했습니다.
             this.viewExecute();
         },
         _onClickNext : function(){
-            this.curIndex++;
-            if (this.curIndex > this.nTabLiLength-1){ // 다음으로 이동할 컨텐츠가 없다면 맨처음 컨텐츠로 이동
-                this.curIndex = 0;
+            this.nCurIndex++;
+            if (this.nCurIndex > this.nTabLiLength-1){ // 다음으로 이동할 컨텐츠가 없다면 맨처음 컨텐츠로 이동
+                this.nCurIndex = 0;
             }
-            this.directType = 'next';
-            // this.viewExecute() 함수를 실행하기 전, 필요한 변수(this.curIndex, this.directType)를 세팅 완료했습니다.
+            this.sDirectType = 'next';
+            // this.viewExecute() 함수를 실행하기 전, 필요한 변수(this.nCurIndex, this.sDirectType)를 세팅 완료했습니다.
             this.viewExecute();
         },
         viewExecute : function() { // 화면 표현을 담당할 함수입니다. 하는일 : ①선택된 탭버튼(or페이징버튼) 활성화 / ②매칭될 컨텐츠 노출 / ③페이지 number 표시
             // ①선택된 탭버튼(or페이징버튼) 활성화
-            this.$tabLi.removeClass('active').eq(this.curIndex).addClass('active');
+            this.$tabLi.removeClass('active').eq(this.nCurIndex).addClass('active');
 
             // ②선택된 탭버튼(or페이징버튼)과 매칭될 컨텐츠 노출
             // 설정된 애니메이션 값에 따라 인터랙션 분리
@@ -258,47 +259,47 @@ button::-moz-focus-inner{padding:0;border:0}
             } else if(this.opts.animate === 'fadeIn') {
                 this. animateFadeIn();
             } else if(this.opts.animate === 'slide') {
-                this.animateSlide(this.directType);
+                this.animateSlide(this.sDirectType);
             }
 
             // ③컨텐츠에 맞는 페이지 number 표시 (ex. 4/8)
             if(this.opts.pageNum === true) {
-                this.$curNav.text(this.curIndex+1);   
+                this.$curNav.text(this.nCurIndex+1);   
             }
         },
         animateDefault : function() {
-            if(this.curIndex == this.orgIndex) return; //활성화된 컨텐츠와 동일한 탭버튼(or페이징버튼)을 클릭할경우 추가 동작하지 않도록 함.
+            if(this.nCurIndex == this.nOrgIndex) return; //활성화된 컨텐츠와 동일한 탭버튼(or페이징버튼)을 클릭할경우 추가 동작하지 않도록 함.
 
-            this.$tabCont.removeClass('active').eq(this.curIndex).addClass('active');
-            this.orgIndex = this.curIndex;
+            this.$tabCont.removeClass('active').eq(this.nCurIndex).addClass('active');
+            this.nOrgIndex = this.nCurIndex;
         },
         animateFadeIn : function() {
-            if(this.curIndex == this.orgIndex) return; //활성화된 컨텐츠와 동일한 탭버튼(or페이징버튼)을 클릭할경우 추가 동작하지 않도록 함.
+            if(this.nCurIndex == this.nOrgIndex) return; //활성화된 컨텐츠와 동일한 탭버튼(or페이징버튼)을 클릭할경우 추가 동작하지 않도록 함.
 
-            this.$tabCont.hide().eq(this.curIndex).fadeIn();
-            this.orgIndex = this.curIndex;
+            this.$tabCont.hide().eq(this.nCurIndex).fadeIn();
+            this.nOrgIndex = this.nCurIndex;
         },
         animateSlide : function(type){
-            if(this.curIndex == this.orgIndex) return; //활성화된 컨텐츠와 동일한 탭버튼(or페이징버튼)을 클릭할경우 추가 동작하지 않도록 함.
+            if(this.nCurIndex == this.nOrgIndex) return; //활성화된 컨텐츠와 동일한 탭버튼(or페이징버튼)을 클릭할경우 추가 동작하지 않도록 함.
 
             //애니메이션 방향처리
-            var dirNum = 0;
+            var nDirNum = 0;
             if(type === 'prev'){
-                dirNum = -1; //왼쪽으로
+                nDirNum = -1; //왼쪽으로
             }else if(type === 'next'){
-                dirNum = 1; //오른쪽으로
+                nDirNum = 1; //오른쪽으로
             }
 
-            this.$tabCont.eq(this.curIndex).css('left', (100*dirNum)+'%').show();
-            this.$tabCont.eq(this.orgIndex).stop().animate({
-                left: (100*(-dirNum))+'%'
+            this.$tabCont.eq(this.nCurIndex).css('left', (100*nDirNum)+'%').show();
+            this.$tabCont.eq(this.nOrgIndex).stop().animate({
+                left: (100*(-nDirNum))+'%'
             },function(){
                 $(this).hide().css('left','');
             });
-            this.$tabCont.eq(this.curIndex).stop().animate({
+            this.$tabCont.eq(this.nCurIndex).stop().animate({
                 left: 0
             });
-            this.orgIndex = this.curIndex;
+            this.nOrgIndex = this.nCurIndex;
         }
     };
 
