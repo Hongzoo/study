@@ -20,6 +20,8 @@ th,td{height:50px;text-align:center}
 .tit{padding-left:10px}
 .name{text-align:center}
 .btn_sort{display:block;margin:0 auto}
+.up .btn_sort:after{display:inline-block;color:red;vertical-align:top;content:'▲'}
+.down .btn_sort:after{display:inline-block;color:red;vertical-align:top;content:'▼'}
 /* //temporary css */
 </style>
 </head>
@@ -32,7 +34,7 @@ th,td{height:50px;text-align:center}
     <hr />
     <!-- container [s] -->
     <div id="container">
-        <table>
+        <table class="tbl_sort1">
         <thead>
         <tr>
         <th>번호<button type="button" class="btn_sort">정렬</button></th>
@@ -57,9 +59,46 @@ th,td{height:50px;text-align:center}
         <td>개발1팀</td>
         </tr>
         <tr>
+        <td>2</td>
+        <td>ffff</td>
+        <td>하이브랩</td>
+        </tr>
+        <tr>
         <td>4</td>
         <td>ffff</td>
         <td>김민재</td>
+        </tr>
+        </tbody>
+        </table>
+        <hr>
+        <table class="tbl_sort2">
+        <thead>
+        <tr>
+        <th>번호<button type="button" class="btn_sort">정렬</button></th>
+        <th>제목<button type="button" class="btn_sort">정렬</button></th>
+        <th>작성자<button type="button" class="btn_sort">정렬</button></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>1</td>
+        <td>ccccc</td>
+        <td>100</td>
+        </tr>
+        <tr>
+        <td>2</td>
+        <td>zzzzz</td>
+        <td>10</td>
+        </tr>
+        <tr>
+        <td>3</td>
+        <td>aaaa</td>
+        <td>10,000</td>
+        </tr>
+        <tr>
+        <td>2</td>
+        <td>fffff</td>
+        <td>1,000</td>
         </tr>
         </tbody>
         </table>
@@ -75,7 +114,90 @@ th,td{height:50px;text-align:center}
 <script>
 (function (win, $) {
     'use strict';
+    var exam = exam || {};
+    exam.View = exam.View || {};
+
+    exam.View.sort = function(tblClass) {
+        this.welTable = $(tblClass);
+        this.init();
+    };
+    exam.View.sort.prototype = {
+        nColIndex : null,
+        nRowLength : null,
+        aTblRows : [],
+        init : function() {
+            this._setElements();
+            this._bindEvents();
+            this.nRowLength = this.welTbodyTr.length;
+        },
+        _setElements : function() {
+            this.welTbody = this.welTable.find('tbody');
+            this.welTbodyTr = this.welTbody.find('tr');
+            this.elBtnSort = this.welTable.find('.btn_sort');
+        },
+        _bindEvents : function() {
+            this.elBtnSort.on('click', $.proxy(this._onclickSort, this));
+        },
+        _onclickSort : function(e) {
+            // 구현 순서
+            // ① 몇번째 열(column)을 정렬하는지 체크
+            // ①-1. 오름차순인지 내림차순인지 체크
+            // ② tr 단위로 table 복제
+            // ③ 각 tr마다 정해진 열의 td를 비교하여 정렬
+            // ④ 정렬된 tr들을 tbody에 덮어쓰기
+
+            var thisTh = $(e.currentTarget).parent();
+
+            this.nColIndex = thisTh.index(); // ①
+            this._setAlignRule(thisTh); // ①-1
+            this._copyRows(); // ②
+            this.aTblRows.sort($.proxy(this._compareFunc, this)); // ③
+            this._updateRows(); // ④
+        },
+        _setAlignRule : function(thisTh) {
+            // 참고 : 해당열이 헝크러져 있으면(.up/.down 둘중 하나라도 없다면) 무조건 오름차순으로 정렬을 시작함
+            if(thisTh.hasClass('up')) {
+                thisTh.removeClass('up').addClass('down');
+            } else {
+                thisTh.removeClass('down').addClass('up').siblings().removeClass('up down');
+            }
+        },
+        _copyRows : function() {
+            this.aTblRows = [];
+            for(var i=0,max=this.nRowLength; i<max; i++) {
+                this.aTblRows.push(this.welTbodyTr.eq(i));
+            }
+        },
+        _updateRows : function() {
+            for(var i=0,max=this.nRowLength; i<max; i++) {
+                this.welTbody.append(this.aTblRows[i]);
+            }
+        },
+        _compareFunc : function(a, b) {
+            var varA = a.children().eq(this.nColIndex).text();
+            var varB = b.children().eq(this.nColIndex).text();
+
+            varA = varA.replace(/\,/g, ''); // 쉼표(,)가 있는 금액타입을 정렬하기 위함
+            varB = varB.replace(/\,/g, '');
+
+            if(this.welTable.find('thead th').eq(this.nColIndex).hasClass('down')) { // 내림차순일 경우 비교순서를 바꿔주기
+                var temp = varA;
+                varA = varB;
+                varB = temp;
+            }
+
+            if(varA < varB) {
+                return -1;
+            } else if(varA > varB) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    };
     $(function () {
+        var examViewSort1 = new exam.View.sort('.tbl_sort1');
+        var examViewSort2 = new exam.View.sort('.tbl_sort2');
     });
 })(window, window.jQuery);
 </script>
