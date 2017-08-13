@@ -140,19 +140,19 @@ th,td{height:50px;text-align:center}
         },
         _onclickSort : function(e) {
             // 구현 순서
-            // ① 몇번째 열(column)을 정렬하는지 체크
-            // ①-1. 오름차순인지 내림차순인지 체크
-            // ② tr 단위로 table 복제
-            // ③ 각 tr마다 정해진 열의 td를 비교하여 정렬
-            // ④ 정렬된 tr들을 tbody에 덮어쓰기
+            // 1) 몇번째 열(column)을 정렬하는지 체크
+            // 1-1) 오름차순인지 내림차순인지 체크
+            // 2) tr 단위로 table 복제
+            // 3) 각 tr마다 정해진 열의 td를 비교하여 정렬
+            // 4) 정렬된 tr들을 tbody에 덮어쓰기
 
             var thisTh = $(e.currentTarget).parent();
 
-            this.nColIndex = thisTh.index(); // ①
-            this._setAlignRule(thisTh); // ①-1
-            this._copyRows(); // ②
-            this.aTblRows.sort($.proxy(this._compareFunc, this)); // ③
-            this._updateRows(); // ④
+            this.nColIndex = thisTh.index(); // 1)
+            this._setAlignRule(thisTh); // 1-1)
+            this._copyRows(); // 2)
+            this.aTblRows.sort($.proxy(this._compareFunc, this)); // 3)
+            this._updateRows(); // 4)
         },
         _setAlignRule : function(thisTh) {
             // 참고 : 해당열이 헝크러져 있으면(.up/.down 둘중 하나라도 없다면) 무조건 오름차순으로 정렬을 시작함

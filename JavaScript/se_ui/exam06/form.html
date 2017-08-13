@@ -158,36 +158,36 @@ p{margin-bottom:30px;padding-bottom:10px;border-bottom:2px solid #da0707;font-si
         },
         _onChangeChk : function(e) {
             // 구현순서
-            // ① 눌린 체크박스 상태가 checked인지/아닌지 확인
-            // ② 체크여부 상태에 따라 체크박스디자인 노출/미노출
+            // 1) 눌린 체크박스 상태가 checked인지/아닌지 확인
+            // 2) 체크여부 상태에 따라 체크박스디자인 노출/미노출
 
-            var bChecked = $(e.currentTarget).prop('checked'), // ①
+            var bChecked = $(e.currentTarget).prop('checked'), // 1)
                 thisCheckBox = $(e.currentTarget).parent();
 
-            bChecked? thisCheckBox.addClass(this.sCheckedClass) : thisCheckBox.removeClass(this.sCheckedClass); // ②
+            bChecked? thisCheckBox.addClass(this.sCheckedClass) : thisCheckBox.removeClass(this.sCheckedClass); // 2)
         },
         _onChangeRdo : function(e) {
             // 구현순서
             // ⓧ 눌린 라디오가 이미 checked 상태면 아무것도 하지 않고 return -> (구현취소) -> change 이벤트이므로 눌린 라디오를 또 누르면 이벤트가 아예 발생하지 않음.
-            // ① 눌린 라디오와 함께 연동될 라디오 친구들을 name 속성으로 찾음
-            // ② 같은 name을 가진 라디오 친구들 모두 checked해제 시키고 눌렀던 라디오만 checked함
+            // 1) 눌린 라디오와 함께 연동될 라디오 친구들을 name 속성으로 찾음
+            // 2) 같은 name을 가진 라디오 친구들 모두 checked해제 시키고 눌렀던 라디오만 checked함
 
-            var sRdoGroupName = $(e.currentTarget).attr('name'); // ①
+            var sRdoGroupName = $(e.currentTarget).attr('name'); // 1)
 
-            this.elInpRdo.filter('[name="'+sRdoGroupName+'"]').parent().removeClass(this.sCheckedClass); // ①~②
-            $(e.currentTarget).parent().addClass(this.sCheckedClass); // ②
+            this.elInpRdo.filter('[name="'+sRdoGroupName+'"]').parent().removeClass(this.sCheckedClass); // 1)~2)
+            $(e.currentTarget).parent().addClass(this.sCheckedClass); // 2)
         },
         _onClickSelectBtn : function(e) {
             // 구현순서
-            // ① 셀렉트 버튼부 클릭시, 열려있으면 닫고 닫혀있으면 여는 toggle 구현
-            // ② 셀렉트 옵션목록 중 클릭시, 셀렉트 버튼부에 선택된 옵션텍스트를 반영하고 셀렉트박스 닫기
-            // ②-1. 셀렉트 옵션목록 중 선택해서 셀렉트박스 닫을 때 focus 해당 셀렉트박스버튼에 보내기
+            // 1) 셀렉트 버튼부 클릭시, 열려있으면 닫고 닫혀있으면 여는 toggle 구현
+            // 2) 셀렉트 옵션목록 중 클릭시, 셀렉트 버튼부에 선택된 옵션텍스트를 반영하고 셀렉트박스 닫기
+            // 2-1) 셀렉트 옵션목록 중 선택해서 셀렉트박스 닫을 때 focus 해당 셀렉트박스버튼에 보내기
             // ③ 셀렉트박스 바깥 클릭시, 셀렉트박스 닫기
 
             var thisSelBox = $(e.currentTarget).parent(),
                 bIsOpen = thisSelBox.hasClass(this.sSelOpenClass);
 
-            bIsOpen? this._closeSelectBox(thisSelBox) : this._openSelectBox(thisSelBox); // ①
+            bIsOpen? this._closeSelectBox(thisSelBox) : this._openSelectBox(thisSelBox); // 1)
         },
         _onClickSelectOpt : function(e) {
             e.preventDefault();
@@ -195,9 +195,9 @@ p{margin-bottom:30px;padding-bottom:10px;border-bottom:2px solid #da0707;font-si
                 thisSelBtn = thisSelBox.find('.select_menu'),
                 sSelectedOpt = $(e.currentTarget).text();
 
-            thisSelBtn.text(sSelectedOpt); // ②
-            this._closeSelectBox(thisSelBox); // ②
-            thisSelBtn.focus(); // ②-1
+            thisSelBtn.text(sSelectedOpt); // 2)
+            this._closeSelectBox(thisSelBox); // 2)
+            thisSelBtn.focus(); // 2-1)
         },
         _onSelectOutside : function(e) {
             this._closeSelectBox($(e.currentTarget)); // ③
