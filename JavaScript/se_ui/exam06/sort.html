@@ -155,7 +155,7 @@ th,td{height:50px;text-align:center}
             this._updateRows(); // 4)
         },
         _setAlignRule : function(thisTh) {
-            // 참고 : 해당열이 헝크러져 있으면(.up/.down 둘중 하나라도 없다면) 무조건 오름차순으로 정렬을 시작함
+            // 참고 : 해당열이 헝크러져 있으면(.up/.down 클래스가 없다면) 무조건 오름차순으로 정렬을 시작함
             if(thisTh.hasClass('up')) {
                 thisTh.removeClass('up').addClass('down');
             } else {
@@ -196,7 +196,7 @@ th,td{height:50px;text-align:center}
         }
     };
     $(function () {
-        var examViewSort1 = new exam.View.sort('.tbl_sort1');
+        var examViewSort1 = new exam.View.sort('.tbl_sort1'); // 한 페이지에 table이 여러개여도 각각 동작할 수 있도록 세팅
         var examViewSort2 = new exam.View.sort('.tbl_sort2');
     });
 })(window, window.jQuery);

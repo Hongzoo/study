@@ -181,8 +181,8 @@ p{margin-bottom:30px;padding-bottom:10px;border-bottom:2px solid #da0707;font-si
             // 구현순서
             // 1) 셀렉트 버튼부 클릭시, 열려있으면 닫고 닫혀있으면 여는 toggle 구현
             // 2) 셀렉트 옵션목록 중 클릭시, 셀렉트 버튼부에 선택된 옵션텍스트를 반영하고 셀렉트박스 닫기
-            // 2-1) 셀렉트 옵션목록 중 선택해서 셀렉트박스 닫을 때 focus 해당 셀렉트박스버튼에 보내기
-            // ③ 셀렉트박스 바깥 클릭시, 셀렉트박스 닫기
+            // 2-1) 셀렉트 옵션목록 중 선택해서 셀렉트박스 닫을 때 focus 해당 셀렉트박스버튼에 보내기 (clickoutside때는 focus 건드리지 않음)
+            // 3) 셀렉트박스 바깥 클릭시, 셀렉트박스 닫기
 
             var thisSelBox = $(e.currentTarget).parent(),
                 bIsOpen = thisSelBox.hasClass(this.sSelOpenClass);
@@ -193,14 +193,14 @@ p{margin-bottom:30px;padding-bottom:10px;border-bottom:2px solid #da0707;font-si
             e.preventDefault();
             var thisSelBox = $(e.currentTarget).closest(this.welSelBox),
                 thisSelBtn = thisSelBox.find('.select_menu'),
-                sSelectedOpt = $(e.currentTarget).text();
+                sOptText = $(e.currentTarget).text();
 
-            thisSelBtn.text(sSelectedOpt); // 2)
+            thisSelBtn.text(sOptText); // 2)
             this._closeSelectBox(thisSelBox); // 2)
             thisSelBtn.focus(); // 2-1)
         },
         _onSelectOutside : function(e) {
-            this._closeSelectBox($(e.currentTarget)); // ③
+            this._closeSelectBox($(e.currentTarget)); // 3)
         },
         _openSelectBox : function(targetBox) {
             var oself = this,
