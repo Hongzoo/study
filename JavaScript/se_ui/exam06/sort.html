@@ -22,6 +22,7 @@ th,td{height:50px;text-align:center}
 .btn_sort{display:block;margin:0 auto}
 .up .btn_sort:after{display:inline-block;color:red;vertical-align:top;content:'▲'}
 .down .btn_sort:after{display:inline-block;color:red;vertical-align:top;content:'▼'}
+td.active{background:gold}
 /* //temporary css */
 </style>
 </head>
@@ -61,7 +62,7 @@ th,td{height:50px;text-align:center}
         <tr>
         <td>2</td>
         <td>ffff</td>
-        <td>하이브랩</td>
+        <td><a href="#" class="test_link">하이브랩</a></td>
         </tr>
         <tr>
         <td>4</td>
@@ -198,6 +199,10 @@ th,td{height:50px;text-align:center}
     $(function () {
         var examViewSort1 = new exam.View.sort('.tbl_sort1'); // 한 페이지에 table이 여러개여도 각각 동작할 수 있도록 세팅
         var examViewSort2 = new exam.View.sort('.tbl_sort2');
+
+        $('.test_link').on('click', function(){
+            $(this).parent().toggleClass('active');
+        });
     });
 })(window, window.jQuery);
 </script>
