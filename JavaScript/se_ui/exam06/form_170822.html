@@ -109,8 +109,8 @@ p{margin-bottom:30px;padding-bottom:10px;border-bottom:2px solid #da0707;font-si
             <div class="select_box">
                 <a href="javascript:;" class="select_menu">선택</a>
                 <ul style="display:none">
-                <li><a href="#">메뉴 1</a></li>
-                <li><a href="#">메뉴 2</a></li>
+                <li><a href="#">메2뉴 1</a></li>
+                <li><a href="#">메2뉴 2</a></li>
                 </ul>
             </div>
         </div>
@@ -130,103 +130,88 @@ p{margin-bottom:30px;padding-bottom:10px;border-bottom:2px solid #da0707;font-si
     var exam = exam || {};
     exam.View = exam.View || {};
 
-    exam.View.form = function() {
+    exam.View.Select = function(customParam) {
+        $.extend(this, customParam || {});
         this.init();
     };
-    exam.View.form.prototype = {
-        sCheckedClass : 'chk_active',
+    exam.View.Select.prototype = {
+        // 구현순서
+        // 1) 셀렉트 버튼부 클릭시, 열려있으면 닫고 닫혀있으면 여는 toggle 동작 구현 : this._slideToggle(e);
+        // 2) 셀렉트 옵션목록 중 클릭시, 셀렉트 버튼부에 선택된 옵션텍스트를 반영하고 셀렉트박스 닫기
+        // 2-1) 셀렉트 옵션목록 중 선택해서 셀렉트박스 닫을 때 focus 해당 셀렉트박스버튼에 보내기 (clickoutside때는 focus 건드리지 않음)
+        // 3) 셀렉트박스 바깥 클릭시, 셀렉트박스 닫기
+        
+        sTargetSel : '.select_box',
+        sTargetBtn : '.select_menu',
         sSelOpenClass : 'opened',
+        bIsOpen : false,
         init : function() {
             this._setElements();
             this._bindEvents();
         },
         _setElements : function() {
-            this.welWrap = $('#container');
-            this.welChkBox = this.welWrap.find('.check_box');
-            this.elInpChk = this.welChkBox.find('.ipt_chk');
-            this.welRdoBox = this.welWrap.find('.radio_box');
-            this.elInpRdo = this.welRdoBox.find('.ipt_rdo');
-            this.welSelBox = this.welWrap.find('.select_box');
-            this.elSelectBtn = this.welSelBox.find('.select_menu');
+            this.welSelBox = $(this.sTargetSel);
+            this.elSelectBtn = this.welSelBox.find(this.sTargetBtn);
             this.elSelectOpt = this.welSelBox.find('li a');
         },
         _bindEvents : function() {
-            this.elInpChk.on('change', $.proxy(this._onChangeChk, this));
-            this.elInpRdo.on('change', $.proxy(this._onChangeRdo, this));
             this.elSelectBtn.on('click', $.proxy(this._onClickSelectBtn, this));
             this.elSelectOpt.on('click', $.proxy(this._onClickSelectOpt, this));
         },
-        _onChangeChk : function(e) {
-            // 구현순서
-            // 1) 눌린 체크박스 상태가 checked인지/아닌지 확인
-            // 2) 체크여부 상태에 따라 체크박스디자인 노출/미노출
-
-            var bChecked = $(e.currentTarget).prop('checked'), // 1)
-                thisCheckBox = $(e.currentTarget).parent();
-
-            bChecked? thisCheckBox.addClass(this.sCheckedClass) : thisCheckBox.removeClass(this.sCheckedClass); // 2)
-        },
-        _onChangeRdo : function(e) {
-            // 구현순서
-            // ⓧ 눌린 라디오가 이미 checked 상태면 아무것도 하지 않고 return -> (구현취소) -> change 이벤트이므로 눌린 라디오를 또 누르면 이벤트가 아예 발생하지 않음.
-            // 1) 눌린 라디오와 함께 연동될 라디오 친구들을 name 속성으로 찾음
-            // 2) 같은 name을 가진 라디오 친구들 모두 checked해제 시키고 눌렀던 라디오만 checked함
-
-            var sRdoGroupName = $(e.currentTarget).attr('name'); // 1)
-
-            this.elInpRdo.filter('[name="'+sRdoGroupName+'"]').parent().removeClass(this.sCheckedClass); // 1)~2)
-            $(e.currentTarget).parent().addClass(this.sCheckedClass); // 2)
-        },
         _onClickSelectBtn : function(e) {
-            // 구현순서
-            // 1) 셀렉트 버튼부 클릭시, 열려있으면 닫고 닫혀있으면 여는 toggle 구현
-            // 2) 셀렉트 옵션목록 중 클릭시, 셀렉트 버튼부에 선택된 옵션텍스트를 반영하고 셀렉트박스 닫기
-            // 2-1) 셀렉트 옵션목록 중 선택해서 셀렉트박스 닫을 때 focus 해당 셀렉트박스버튼에 보내기 (clickoutside때는 focus 건드리지 않음)
-            // 3) 셀렉트박스 바깥 클릭시, 셀렉트박스 닫기
-
-            var thisSelBox = $(e.currentTarget).parent(),
-                bIsOpen = thisSelBox.hasClass(this.sSelOpenClass);
-
-            bIsOpen? this._closeSelectBox(thisSelBox) : this._openSelectBox(thisSelBox); // 1)
+            this._slideToggle(e);
         },
         _onClickSelectOpt : function(e) {
             e.preventDefault();
-            var thisSelBox = $(e.currentTarget).closest(this.welSelBox),
-                thisSelBtn = thisSelBox.find('.select_menu'),
-                sOptText = $(e.currentTarget).text();
+            var sOptText = $(e.currentTarget).text();
 
-            thisSelBtn.text(sOptText); // 2)
-            this._closeSelectBox(thisSelBox); // 2)
-            thisSelBtn.focus(); // 2-1)
+            this._slideToggle(e); // 1)
+            $(e.currentTarget).closest(this.sTargetSel).find(this.sTargetBtn).text(sOptText).focus(); // 2), 2-1)
         },
-        _onSelectOutside : function(e) {
-            this._closeSelectBox($(e.currentTarget)); // 3)
-        },
-        _openSelectBox : function(targetBox) {
-            var oself = this,
-                nOptHeight = $(targetBox).find('ul').height();
+        _slideToggle : function(e) { // 1)
+            var oSelf = this,
+                elThisSelBox = $(e.currentTarget).closest(this.sTargetSel);
 
-            $(targetBox).find('ul').css('height','0').show().animate({
-                height: nOptHeight
-            }, 100, function() {
-                $(this).parent().addClass(oself.sSelOpenClass);
+            this.bIsOpen = elThisSelBox.hasClass(this.sSelOpenClass);
+            elThisSelBox.find('ul').slideToggle(100, function() {
+                oSelf.bIsOpen = !oSelf.bIsOpen;
+                oSelf.bIsOpen? oSelf._bindOutside(true, elThisSelBox) : oSelf._bindOutside(false, elThisSelBox); // 3)
             });
-            $(targetBox).on('clickoutside', $.proxy(this._onSelectOutside, this));
+            elThisSelBox.toggleClass(this.sSelOpenClass);
         },
-        _closeSelectBox : function(targetBox) {
-            var oself = this;
+        _bindOutside : function(booleanType, target) { // 3)
+            booleanType? target.on('clickoutside.closeSelBox', $.proxy(this._onSelectOutside, this)) : target.off('clickoutside.closeSelBox');
+            console.log('바인드아웃사이드');
+        },
+        _onSelectOutside : function() { // 3)
+            this.elSelectBtn.trigger('click');
+            console.log('아웃사이드실행');
+        }
+    };
 
-            $(targetBox).find('ul').animate({
-                height: 0
-            }, 100, function() {
-                $(this).hide().css('height','auto').parent().removeClass(oself.sSelOpenClass);
+    $.fn.oExamViewSelect = function () {
+        for (var i = 0, max = this.length; i < max; i++) {
+            new exam.View.Select({
+                sTargetSel : this.eq(i)
             });
-            $(targetBox).off('clickoutside');
         }
     };
 
     $(function () {
-        var examViewForm = new exam.View.form();
+        // 체크박스
+        $('.ipt_chk').on('change', function(){
+            $(this).parent().toggleClass('chk_active', $(this).prop('checked'));
+        });
+
+        // 라디오박스
+        $('.ipt_rdo').on('change', function(){
+            var sRdoGroupName = $(this).attr('name');
+            $('.ipt_rdo').filter('[name="'+sRdoGroupName+'"]').each(function() {
+                $(this).parent().toggleClass('chk_active', $(this).prop('checked'));
+            });
+        });
+
+        $('.select_box').oExamViewSelect();
     });
 })(window, window.jQuery);
 </script>
