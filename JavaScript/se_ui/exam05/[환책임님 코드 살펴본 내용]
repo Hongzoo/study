@@ -1,0 +1,19 @@
+[환책임님 코드 살펴본 내용]
+
+[레이어팝업]
+* 구현 방법 point
+    - 레이어 안에서 키보드tab 범위 가두는 방식 : 레이어 구조 앞/뒤로 빈 구조를 넣어두고 해당 구조에 포커스가 닿으면 레이어안으로 포커스를 돌려주는 방식.
+    - 공통기능만을 정의한 prototype 객체가 있고, 각기 다른 레이어별 옵션만을 정의한 prototype객체가 있다.
+* 새로 발견한 것들
+    - 플러그인 화 작업 중 args(옵션값) 은 생략가능하도록 args || {}로 작성, 그것이 유효성 검사?
+    - .on() 에서 처음 본 event : focusin, keydown, clickoutside, touchendoutside
+    - .on() 메서드에 이벤트를 넣는게 2개가 가능!? .on('clickoutside touchendoutside')
+    - 낯선 메서드 : .triggerHandler(), .off(), clearTimeout(), .stop(), fadeOut(), slideUp()
+
+[탭/슬라이드]
+* 구현 방법 point
+    - 어떻게 이렇게 짧지!!! 정갈하다..!
+* 새로 발견한 것들
+    - .on() 에서 처음 본 event : hashchange
+        ㄴ hashchange 이것은 윈도우에서만 쓸 수 있는가~? DOM? BOM?
+    - 낯선 메서드 : .location, .hash

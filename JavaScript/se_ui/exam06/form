@@ -1,0 +1,16 @@
+form
+	상태를 체크하는 것은 input 기준으로 하는 게 정확하다. (클래스 기준 NO)
+	animate로 슬라이드 업/다운을 따로따로 작성하는 것보다, slideToggle을 쓰면 한번에 처리할 수 있다.
+	clickoutside .찍고 네임스페이스
+	.is(), .prop() 차이점
+	.filter안에 펑션.
+
+sort
+	detach??디태치? 를 사용하면 remove되었을 떄 등록된 이벤트가 날아가는 것을 해결할 수 있단?
+
+sticky
+	BOM, DOM
+	스크롤 탑 값은 window 창에서 구해야 하는것. (BOM)
+	문서 전체 높이를 구한다는 건 html (DOM)
+
+	ssg 는 waypoint.jquery플러그인 사용.
