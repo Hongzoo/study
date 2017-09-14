@@ -175,8 +175,8 @@ td.active{background:gold}
             }
         },
         _compareFunc : function(a, b) {
-            var varA = a.children().eq(this.nColIndex).text();
-            var varB = b.children().eq(this.nColIndex).text();
+            var varA = a.children().eq(this.nColIndex).html();
+            var varB = b.children().eq(this.nColIndex).html();
 
             console.log('varA', varA, 'typeOf', varA.typeOf, 'varB', varB);
             console.log(varA.typeOf);
