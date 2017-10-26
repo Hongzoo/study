@@ -1,5 +1,9 @@
-JS 스터디 산출물 index : https://hongzoo.github.io/study/JavaScript/se_ui/index.html
+# JS 스터디 산출물 index : 
+https://hongzoo.github.io/study/JavaScript/se_ui/index.html
 
+---
+
+# 팀원 저장소
 * 송윤혜 : https://github.com/yunhyesong/study
 * 김하영 : https://github.com/hayoungkkim/study
 * 최민성 : https://github.com/zestairlove/std_jsHive
