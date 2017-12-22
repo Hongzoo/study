@@ -76,6 +76,7 @@ table{border-collapse:collapse;border-spacing:0}
                 nItemHeight: 0,
                 nItemTotal: 0,
                 nViewIndex: 1,
+                sAnimationType: 'slide',
                 _loopShowNextKeywordInterval: null,
                 init: function() {
                     this._setElements();
@@ -101,12 +102,20 @@ table{border-collapse:collapse;border-spacing:0}
                         if(oSelf.nViewIndex > oSelf.nItemTotal) {
                             oSelf._restartFirstKeyword();
                         }
-                        oSelf._showNextKeyword();
+                        oSelf._showNextKeyword(oSelf.sAnimationType);
                         oSelf.nViewIndex++
                     }, 2000);
                 },
-                _showNextKeyword: function() {
-                    this.welRankList.css('top', this.nItemHeight * (-this.nViewIndex));
+                _showNextKeyword: function(sAniType) {
+                    switch (sAniType) {
+                        case 'slide':
+                            this.welRankList.animate({
+                                top: (this.nItemHeight * (-this.nViewIndex))
+                            }, 200);
+                            break;
+                        default:
+                            this.welRankList.css('top', this.nItemHeight * (-this.nViewIndex));
+                    }
                 },
                 _restartFirstKeyword: function() {
                     this.welRankList.css('top', '0');
