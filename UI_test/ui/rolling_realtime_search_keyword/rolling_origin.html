@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Realtime</title>
+<style>
+/* Reset */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,p,table,th,td,form,fieldset,legend,textarea,input,select,textarea,button,article,aside,dialog,footer,header,section,footer,nav,figure,main{margin:0;padding:0}
+article,aside,dialog,footer,header,section,footer,nav,figure,main{display:block}
+html,body{height:100%;-webkit-text-size-adjust:none;-ms-text-size-adjust:none}
+body,input,select,textarea,button{font-family:'Apple SD Gothic Neo', '돋움', Dotum, sans-serif; font-size:12px}
+fieldset,li,img{border:0;vertical-align:top}
+ul,ol{list-style:none}
+button{overflow:visible;border:0;background-color:transparent;cursor:pointer}
+button::-moz-focus-inner{padding:0;border:0}
+address,caption,em{font-style:normal}
+a,a:focus,a:active,a:hover{text-decoration:none}
+table{border-collapse:collapse;border-spacing:0}
+.blind,caption span,legend{overflow:hidden;position:absolute;top:0;left:0;width:1px;height:1px;font-size:1px;line-height:100px;white-space:nowrap}
+
+.section_nav{margin:20px 0;padding:20px 0;background:rgba(255,0,0,.1)}
+.nav_inner{position:relative;width:980px;margin:0 auto;background:rgba(255,0,0,.2)}
+.nav_inner .nav ul{padding:8px 0;}
+.nav_inner .nav ul:after{display:block;clear:both;content:''}
+.nav_inner .nav li{float:left;margin-right:4px}
+.nav_inner .nav li a{display:block;padding:4px 8px;background:rgba(255,0,0,.3)}
+
+.realtime{position:absolute;right:0;top:8px;border:1px solid;width:200px;height:20px;overflow:hidden;}
+.realtime ol{position:absolute;top:0;right:0;left:0;padding-left:4px;font-size:17px;background:#fff;}
+.realtime li{height:20px;line-height:1.2em;}
+.realtime.pop{height:auto;overflow:visible;}
+</style>
+</head>
+<body>
+    <div class="section_nav">
+        <div class="nav_inner">
+            <div class="nav">
+                <ul>
+                    <li><a href="#">메일</a></li>
+                    <li><a href="#">카페</a></li>
+                    <li><a href="#">블로그</a></li>
+                    <li><a href="#">쇼핑</a></li>
+                </ul>
+            </div>
+            <div id="realtime" class="realtime">
+                <ol>
+                    <li>1. 방탄소년단</li>
+                    <li>2. 인천공항 리무진버스</li>
+                    <li>3. 평창 롱패딩</li>
+                    <li>4. 귀순병사</li>
+                    <li>5. 슈주 롱패딩</li>
+                    <li>6. 역모</li>
+                    <li>7. 마동석</li>
+                    <li>8. 이번 생은 처음이라</li>
+                    <li>9. 영화순위</li>
+                    <li>10. 국세청홈택스</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+    <script src="../../js/library/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript">
+        (function (win, $) {
+            'use strict';
+            var portal = portal || {};
+            portal.View = portal.View || {};
+            portal.View.main = portal.View.main || {};
+
+            portal.View.main.ranking = function() {
+                this.init();
+            };
+
+            portal.View.main.ranking.prototype = {
+                nItemHeight: 0,
+                nItemTotal: 0,
+                nViewIndex: 1,
+                sAnimationType: 'slide',
+                _loopAnimateRollingInterval: null,
+                init: function() {
+                    this._setElements();
+                    this._initLayout();
+                },
+                _setElements: function() {
+                    this.welRankWrap = $('#realtime');
+                    this.welRankList = this.welRankWrap.find('ol');
+                    this.welRankItem = this.welRankList.find('li');
+                    this.welRankFirstItem = this.welRankItem.eq(0);
+                },
+                _initLayout: function() {
+                    this.nItemTotal = this.welRankItem.length; // 몇 위까지 있는지 : 10
+                    this.nItemHeight = this.welRankItem.outerHeight(); // 랭킹 엘리먼트의 1개의 높이 : 20
+                    this.welRankFirstItem.clone().appendTo(this.welRankList);
+                    this.welRankList.css('top', '0');
+                    this._loopAnimateRolling();
+                },
+                _loopAnimateRolling: function() {
+                    var oSelf = this;
+
+                    this._loopAnimateRollingInterval = setInterval(function() {
+                        if(oSelf.nViewIndex > oSelf.nItemTotal) {
+                            oSelf._resetRollingStartPos();
+                        }
+                        oSelf._animateRolling(oSelf.sAnimationType);
+                    }, 2000);
+                },
+                _animateRolling: function(sAniType) {
+                    var oSelf = this;
+
+                    switch (sAniType) {
+                        case 'slide':
+                            this.welRankList.animate({
+                                top: (this.nItemHeight*-this.nViewIndex)
+                            }, 200);
+
+                            break;
+
+                        default:
+                            this.welRankList.css('top', this.nItemHeight*-this.nViewIndex);
+                    }
+                    this.nViewIndex++
+                },
+                _resetRollingStartPos: function() {
+                    this.welRankList.css('top', '0');
+                    this.nViewIndex = 1;
+                }
+            }
+
+            $(function(){
+                var realtimeRolling = new portal.View.main.ranking();
+            });
+        })(window, window.jQuery);
+    </script>
+</body>
+</html>
